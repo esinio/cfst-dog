@@ -10,6 +10,8 @@ WORKDIR /build
 # 克隆源代码 (使用 --depth 1 减少克隆体积)
 RUN git clone --depth 1 https://github.com/XIU2/CloudflareSpeedTest.git .
 
+ENV GOPROXY=https://goproxy.cn,direct
+
 # 编译程序
 # CGO_ENABLED=0 确保静态链接，提高在 alpine 上的兼容性
 RUN CGO_ENABLED=0 go build -ldflags "-s -w" -o cfst main.go
