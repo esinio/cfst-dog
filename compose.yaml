@@ -1,0 +1,23 @@
+services:
+  cfst:
+    image: localhost/cfst-dog:latest
+    restart: always
+    environment:
+      - "TZ=Asia/Shanghai"
+    volumes:
+      - ./data:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cfst.entrypoints=web, websecure"
+      - "traefik.http.routers.cfst.rule=Host(`cfst.mydomain.com`) || Host(`cfst.192.168.1.146.nip.io`)"
+      - "traefik.http.routers.cfst.middlewares=cfst"
+      - "traefik.http.middlewares.cfst.compress=true"
+      - "traefik.http.middlewares.cfst.compress.excludedcontenttypes=text/event-stream"
+      - "traefik.http.services.cfst.loadbalancer.server.port=8080"
+    networks:
+      ingress:
+        priority: 1000
+
+networks:
+  ingress:
+    external: true
